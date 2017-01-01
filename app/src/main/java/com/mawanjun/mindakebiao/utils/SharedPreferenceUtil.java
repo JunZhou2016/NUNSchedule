@@ -4,13 +4,17 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 /**
- * SharedPreference工具类
- * @author lizhangqu
- * @date 2015-2-1
+ * 项目名称：MinDaKeBiao
+ * 类描述：SharedPreferencesUtil工具类
+ * 创建人：马万军
+ * 创建时间：2016/12/27 22:18
+ * 修改人：马万军
+ * 修改时间：2016/12/27 22:18
+ * 修改备注：
  */
 public class SharedPreferenceUtil {
-    private Context mContext;
-    private String mFileName;
+    private static Context mContext;
+    private  static  String mFileName;
     public SharedPreferenceUtil(Context context,String fileName){
         mContext = context;
         this.mFileName=fileName;
@@ -19,7 +23,7 @@ public class SharedPreferenceUtil {
      * @param key
      * @param value
      */
-    public void setKeyData(String key,String value){
+    public  void setKeyData(String key,String value){
         SharedPreferences sharedPreferences = mContext.getSharedPreferences(mFileName, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(key, value);
@@ -30,7 +34,7 @@ public class SharedPreferenceUtil {
      * @param key
      * @return
      */
-    public String getKeyData(String key){
+    public static String getKeyData(String key){
         SharedPreferences sharedPreferences = mContext.getSharedPreferences(mFileName, Context.MODE_PRIVATE);
         String value = sharedPreferences.getString(key, "");//第二个参数为默认值
         return value;

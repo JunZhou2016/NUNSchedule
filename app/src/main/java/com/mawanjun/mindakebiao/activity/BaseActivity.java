@@ -1,5 +1,6 @@
 package com.mawanjun.mindakebiao.activity;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -12,7 +13,13 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 /**
- * Created by 伟阳 on 2016/3/12.
+ * 项目名称：MinDaKeBiao
+ * 类描述：BaseActivity基类Activity，所有Activity的共性类
+ * 创建人：马万军
+ * 创建时间：2016/12/27 22:18
+ * 修改人：马万军
+ * 修改时间：2016/12/27 22:18
+ * 修改备注：
  */
 public class BaseActivity extends AppCompatActivity {
 
@@ -62,4 +69,5 @@ public class BaseActivity extends AppCompatActivity {
         }
         return true;
     }
+
 }

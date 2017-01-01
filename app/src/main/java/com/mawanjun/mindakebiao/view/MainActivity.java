@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Gravity;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,6 +31,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
 
@@ -59,7 +61,7 @@ public class MainActivity extends BaseActivity {
         tabView.setTabViewGravity(Gravity.TOP);
         tabView.setTabViewDefaultPosition(0);
         //end of custom
-        tabView.setTabViewChild(tabViewChildList, getSupportFragmentManager());
+        tabView.setTabViewChild(tabViewChildList,getSupportFragmentManager());
 
     }
 

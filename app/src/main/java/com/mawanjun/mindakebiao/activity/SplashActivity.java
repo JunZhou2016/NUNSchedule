@@ -49,7 +49,7 @@ ImageView imageView;
 
     public Class<? extends Object>  chooseActivity(){
         SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(
-                        getApplicationContext(), "accountInfo");
+                        getApplicationContext(),"accountInfo");
                 String isLogin = sharedPreferenceUtil.getKeyData("isLogin");
                 if (isLogin.equals("TRUE")) {
                     return  MainActivity.class;
