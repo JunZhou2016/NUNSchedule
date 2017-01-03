@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.mawanjun.mindakebiao.model.Course;
-import com.mawanjun.mindakebiao.view.CourseFragment;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,25 +1,20 @@
 package com.mawanjun.mindakebiao.activity;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.mawanjun.mindakebiao.R;
 import com.mawanjun.mindakebiao.net.HttpConnection;
 import com.mawanjun.mindakebiao.net.LoginService;
 import com.mawanjun.mindakebiao.utils.SharedPreferenceUtil;
 import com.mawanjun.mindakebiao.utils.ToastUtil;
-import com.mawanjun.mindakebiao.view.CourseFragment;
-import com.mawanjun.mindakebiao.view.MainActivity;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * 项目名称：MinDaKeBiao

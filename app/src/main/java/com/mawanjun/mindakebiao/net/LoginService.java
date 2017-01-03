@@ -118,6 +118,7 @@ public class LoginService {
                         isLogin = false;
                     }
                     changeEnvironment(httpCallBack,isLogin);
+
                     response.close();
                 }
             }

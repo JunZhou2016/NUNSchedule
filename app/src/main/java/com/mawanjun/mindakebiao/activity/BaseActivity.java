@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -21,7 +22,7 @@ import android.widget.Toast;
  * 修改时间：2016/12/27 22:18
  * 修改备注：
  */
-public class BaseActivity extends AppCompatActivity {
+public class BaseActivity extends FragmentActivity {
 
     private int backKeyPressedTime = 0;
 

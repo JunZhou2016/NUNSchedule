@@ -1,4 +1,4 @@
-package com.mawanjun.mindakebiao.view;
+package com.mawanjun.mindakebiao.activity;
 
 import android.support.v4.app.Fragment;
 

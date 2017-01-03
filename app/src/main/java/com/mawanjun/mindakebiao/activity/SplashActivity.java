@@ -1,7 +1,6 @@
 package com.mawanjun.mindakebiao.activity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -9,7 +8,6 @@ import android.widget.ImageView;
 
 import com.mawanjun.mindakebiao.R;
 import com.mawanjun.mindakebiao.utils.SharedPreferenceUtil;
-import com.mawanjun.mindakebiao.view.MainActivity;
 
 import gr.net.maroulis.library.EasySplashScreen;
 
