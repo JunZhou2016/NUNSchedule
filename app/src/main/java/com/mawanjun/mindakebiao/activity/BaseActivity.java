@@ -1,6 +1,8 @@
 package com.mawanjun.mindakebiao.activity;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -40,35 +42,36 @@ public class BaseActivity extends FragmentActivity {
         }
     }
 
+
     public boolean isNetWorkConn() {
         ConnectivityManager manager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo info = manager.getActiveNetworkInfo();
         return info != null && info.isConnected();
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK && backKeyPressedTime == 0) {
-            Toast.makeText(this, "再按一次返回键退出程序", Toast.LENGTH_SHORT).show();
-            backKeyPressedTime = 1;
-            new Thread() {
-                @Override
-                public void run() {
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    } finally {
-                        backKeyPressedTime = 0;
-                    }
-                }
-            }.start();
-            return false;
-        } else if (keyCode == KeyEvent.KEYCODE_BACK && backKeyPressedTime == 1) {
-            this.finish();
-            System.exit(0);
-        }
-        return true;
-    }
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if (keyCode == KeyEvent.KEYCODE_BACK && backKeyPressedTime == 0) {
+//            Toast.makeText(this, "再按一次返回键退出程序", Toast.LENGTH_SHORT).show();
+//            backKeyPressedTime = 1;
+//            new Thread() {
+//                @Override
+//                public void run() {
+//                    try {
+//                        Thread.sleep(2000);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    } finally {
+//                        backKeyPressedTime = 0;
+//                    }
+//                }
+//            }.start();
+//            return false;
+//        } else if (keyCode == KeyEvent.KEYCODE_BACK && backKeyPressedTime == 1) {
+//            this.finish();
+//            System.exit(0);
+//        }
+//        return true;
+//    }
 
 }

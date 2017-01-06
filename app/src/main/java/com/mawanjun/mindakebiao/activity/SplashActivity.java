@@ -21,7 +21,7 @@ import gr.net.maroulis.library.EasySplashScreen;
  * 修改备注：
  */
 public class SplashActivity extends Activity {
-ImageView imageView;
+
 
 
     @Override
@@ -32,12 +32,12 @@ ImageView imageView;
                 .withFullScreen()
                 .withSplashTimeOut(1000)
                 .withTargetActivity(chooseActivity())
-                //.withBackgroundResource(android.R.color.holo_red_light)
-                .withBackgroundColor(Color.WHITE)
-                .withFooterText("Copyright 2016 devma")
-                .withBeforeLogoText("团结进取")
-                .withLogo(R.mipmap.ic_launcher)
-                .withAfterLogoText("砥砺成才")
+                .withBackgroundResource(R.drawable.bg)
+                //.withBackgroundColor(Color.parseColor("#607d8b"))
+                .withFooterText("Copyright © devma    V-1.0")
+                //.withBeforeLogoText("北方民族大学")
+                .withLogo(R.drawable.splash)
+                .withAfterLogoText("团结进取  砥砺成才")
                 .create();
 
 

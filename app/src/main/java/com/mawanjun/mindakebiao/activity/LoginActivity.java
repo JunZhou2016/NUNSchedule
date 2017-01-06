@@ -1,18 +1,29 @@
 package com.mawanjun.mindakebiao.activity;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.text.Html;
+import android.text.SpannableStringBuilder;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.mawanjun.mindakebiao.R;
 import com.mawanjun.mindakebiao.net.HttpConnection;
 import com.mawanjun.mindakebiao.net.LoginService;
 import com.mawanjun.mindakebiao.utils.SharedPreferenceUtil;
 import com.mawanjun.mindakebiao.utils.ToastUtil;
+import com.wayww.edittextfirework.FireworkView;
 
 import java.io.IOException;
 
@@ -33,23 +44,52 @@ public class LoginActivity extends  BaseActivity {
     private ImageView mIvCodesIcon;
     private Button mBtnLogin;
     private Button mRefresh;
+    private TextView mHelpText;
+    private ImageView mLogo;
+    private FireworkView mFireWorkView1, mFireWorkView2, mFireWorkView3;
 
-    private LoginService mLoginService;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
 
+    private void assignViews() {
         mEtUserName = (EditText) findViewById(R.id.login_et_username);
         mEtPwd = (EditText) findViewById(R.id.login_et_pwd);
         mEtCodes = (EditText) findViewById(R.id.login_et_codes);
         mIvCodesIcon = (ImageView) findViewById(R.id.login_iv_codes_img);
-        mBtnLogin = (Button) findViewById(R.id.login_btn_login);
-        mRefresh = (Button) findViewById(R.id.refresh_codes);
+        mBtnLogin = (Button) findViewById(R.id.refresh_codes);
+        mRefresh = (Button) findViewById(R.id.login_btn_login);
+        mHelpText = (TextView) findViewById(R.id.help_text);
+        mLogo = (ImageView) findViewById(R.id.imageViewLogo);
+        mFireWorkView1 = (FireworkView) findViewById(R.id.fire_work1);
+        mFireWorkView2 = (FireworkView) findViewById(R.id.fire_work2);
+        mFireWorkView3 = (FireworkView) findViewById(R.id.fire_work3);
+        mFireWorkView1.bindEditText(mEtUserName);
+        mFireWorkView2.bindEditText(mEtPwd);
+        mFireWorkView3.bindEditText(mEtCodes);
+    }
+
+
+    private LoginService mLoginService;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+        assignViews();
         initWidget(savedInstanceState);
         initClick();
         processLogin(savedInstanceState);
 
+        mHelpText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showHelpActivity();
+            }
+        });
+        mLogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showHelpActivity();
+            }
+        });
     }
 
 
@@ -59,7 +99,7 @@ public class LoginActivity extends  BaseActivity {
 
         String userName = SharedPreferenceUtil.getKeyData("userNameKey");
         String pwd = SharedPreferenceUtil.getKeyData("pwdKey");
-        if (!userName.equals("") && !pwd.equals("")){
+        if (!userName.equals("") && !pwd.equals("")) {
             mEtUserName.setText(userName);
             mEtPwd.setText(pwd);
         }
@@ -67,7 +107,7 @@ public class LoginActivity extends  BaseActivity {
         setUpCodesImage();
     }
 
-    private void setUpCodesImage(){
+    private void setUpCodesImage() {
         try {
             mLoginService.getCodesImg(new HttpConnection.HttpCallBack<Bitmap>() {
                 @Override
@@ -79,7 +119,6 @@ public class LoginActivity extends  BaseActivity {
             e.printStackTrace();
         }
     }
-
 
     protected void initClick() {
         mBtnLogin.setOnClickListener(new View.OnClickListener() {
@@ -99,21 +138,20 @@ public class LoginActivity extends  BaseActivity {
                         public void callback(Boolean data) {
                             dialog.dismiss();
                             //登陆成功
-                            if (data){
+                            if (data) {
                                 //存储数据
-                                SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(getApplicationContext(),"accountInfo");
-                                sharedPreferenceUtil.setKeyData("userNameKey",userName);
-                                sharedPreferenceUtil.setKeyData("pwdKey",pwd);
-                                sharedPreferenceUtil.setKeyData("isLogin","TRUE");
+                                SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(getApplicationContext(), "accountInfo");
+                                sharedPreferenceUtil.setKeyData("userNameKey", userName);
+                                sharedPreferenceUtil.setKeyData("pwdKey", pwd);
+                                sharedPreferenceUtil.setKeyData("isLogin", "TRUE");
 
                                 //跳转到课表界面（因为是从课表界面调到登陆界面的，所以将自己杀死就可以了）
                                 setResult(RESULT_OK);
 
                                 finish();
-                            }
-                            else {
+                            } else {
                                 //提示账号或者密码错误
-                                ToastUtil.showToast(getApplicationContext(),"账号或密码错误");
+                                ToastUtil.showToast(getApplicationContext(), "账号或密码错误");
                                 //重新获取验证码
                                 setUpCodesImage();
                             }
@@ -140,9 +178,22 @@ public class LoginActivity extends  BaseActivity {
     }
 
 
-
-
     protected void processLogin(Bundle savedInstanceState) {
+
+    }
+
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        if (newConfig.orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+            //TODO:
+        }
+        super.onConfigurationChanged(newConfig);
+    }
+
+    private void showHelpActivity() {
+        Intent intent = new Intent(LoginActivity.this,HelpActivity.class);
+        startActivity(intent);
 
     }
 }
