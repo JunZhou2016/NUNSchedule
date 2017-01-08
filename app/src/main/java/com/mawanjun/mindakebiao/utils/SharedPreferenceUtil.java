@@ -29,6 +29,7 @@ public class SharedPreferenceUtil {
         editor.putString(key, value);
         editor.commit();
     }
+
     /**
      * 根据键得到值，如果为空返回""
      * @param key
@@ -39,5 +40,19 @@ public class SharedPreferenceUtil {
         String value = sharedPreferences.getString(key, "");//第二个参数为默认值
         return value;
     }
+
+    public void setBoolean(String key,boolean defValue){
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences(mFileName, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(key,defValue);
+        editor.commit();
+    }
+
+    public boolean getBoolean(String key){
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences(mFileName, Context.MODE_PRIVATE);
+        boolean value = sharedPreferences.getBoolean(key,true);//第二个参数为默认值
+        return value;
+    }
+
 
 }

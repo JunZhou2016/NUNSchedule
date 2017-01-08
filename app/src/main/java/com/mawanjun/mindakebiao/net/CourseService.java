@@ -52,7 +52,7 @@ public class CourseService {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                //登陆到课表，并解析课程表的资源
+                //登录到课表，并解析课程表的资源
                 if (response.isSuccessful()){
                     //其实这里可以使用InputStream进行优化的。以后再说吧
                     final String clsDocument = response.body().string();

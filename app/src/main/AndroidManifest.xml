@@ -23,10 +23,11 @@
 
         <activity android:name=".activity.BaseActivity"></activity>
         <activity android:name=".activity.LoginActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"></activity>
+            android:launchMode="singleTask"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity android:name=".activity.MainActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"></activity>
-        <activity android:name=".activity.HelpActivity"></activity>
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name=".activity.HelpActivity"/>
     </application>
 
 </manifest>

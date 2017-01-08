@@ -103,7 +103,7 @@
 
         <TextView
             android:id="@+id/help_text"
-            android:text="帮助"
+            android:text="无法登录？"
             android:textColor="#00aaee"
             android:textSize="14sp"
             android:layout_marginTop="20dp"

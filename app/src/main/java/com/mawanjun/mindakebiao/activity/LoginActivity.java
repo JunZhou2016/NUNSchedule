@@ -54,8 +54,8 @@ public class LoginActivity extends  BaseActivity {
         mEtPwd = (EditText) findViewById(R.id.login_et_pwd);
         mEtCodes = (EditText) findViewById(R.id.login_et_codes);
         mIvCodesIcon = (ImageView) findViewById(R.id.login_iv_codes_img);
-        mBtnLogin = (Button) findViewById(R.id.refresh_codes);
-        mRefresh = (Button) findViewById(R.id.login_btn_login);
+        mBtnLogin = (Button) findViewById(R.id.login_btn_login);
+        mRefresh = (Button) findViewById(R.id.refresh_codes);
         mHelpText = (TextView) findViewById(R.id.help_text);
         mLogo = (ImageView) findViewById(R.id.imageViewLogo);
         mFireWorkView1 = (FireworkView) findViewById(R.id.fire_work1);
@@ -70,7 +70,7 @@ public class LoginActivity extends  BaseActivity {
     private LoginService mLoginService;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         assignViews();
@@ -146,8 +146,9 @@ public class LoginActivity extends  BaseActivity {
                                 sharedPreferenceUtil.setKeyData("isLogin", "TRUE");
 
                                 //跳转到课表界面（因为是从课表界面调到登陆界面的，所以将自己杀死就可以了）
-                                setResult(RESULT_OK);
-
+                                //setResult(RESULT_OK);
+                                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                                startActivity(intent);
                                 finish();
                             } else {
                                 //提示账号或者密码错误

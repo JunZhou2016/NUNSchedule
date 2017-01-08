@@ -49,11 +49,11 @@ public class MainActivity extends BaseActivity  {
         List<Fragment> mFragments;
 
         @Override
-        protected void onCreate(@Nullable Bundle savedInstanceState) {
+        public void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
 
-            //这里这样使用Fragment仅用于测试，请勿模仿！
+
             initFragment();
 
             BottomTab();

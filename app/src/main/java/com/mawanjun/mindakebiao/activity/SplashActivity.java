@@ -48,11 +48,17 @@ public class SplashActivity extends Activity {
     public Class<? extends Object>  chooseActivity(){
         SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(
                         getApplicationContext(),"accountInfo");
-                String isLogin = sharedPreferenceUtil.getKeyData("isLogin");
-                if (isLogin.equals("TRUE")) {
-                    return  MainActivity.class;
+                boolean isFirst = sharedPreferenceUtil.getBoolean("isFirst");
+                if (isFirst) {
+                    sharedPreferenceUtil.setBoolean("isFirst",false);
+                    return HelpActivity.class;
                 } else {
-                   return LoginActivity.class;
+                    String isLogin = sharedPreferenceUtil.getKeyData("isLogin");
+                    if (isLogin.equals("TRUE")){
+                        return MainActivity.class;
+                    }else {
+                        return LoginActivity.class;
+                    }
                 }
 
     }

@@ -7,13 +7,19 @@ import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.mawanjun.mindakebiao.R;
 
 /**
  * 项目名称：MinDaKeBiao
@@ -27,6 +33,11 @@ import android.widget.Toast;
 public class BaseActivity extends FragmentActivity {
 
     private int backKeyPressedTime = 0;
+    private ImageView mImageView;
+    private TextView mTitleText;
+
+
+
 
     protected void setScreen() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -49,7 +60,27 @@ public class BaseActivity extends FragmentActivity {
         return info != null && info.isConnected();
     }
 
-//    @Override
+    public void setTitleText(String titleText){
+        mTitleText = (TextView) findViewById(R.id.title_text);
+        mTitleText.setText(titleText);
+    }
+
+    public  void imageBack() {
+        mImageView = (ImageView) findViewById(R.id.back);
+        mImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    //    @Override
 //    public boolean onKeyDown(int keyCode, KeyEvent event) {
 //        if (keyCode == KeyEvent.KEYCODE_BACK && backKeyPressedTime == 0) {
 //            Toast.makeText(this, "再按一次返回键退出程序", Toast.LENGTH_SHORT).show();
