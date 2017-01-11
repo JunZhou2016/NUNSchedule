@@ -54,7 +54,7 @@ public class HelpActivity extends  BaseActivity {
         mDownload.setText(Html.fromHtml(s1));
         mDownload.setMovementMethod(LinkMovementMethod.getInstance());
 
-        setTitleText("登录说明·");
+        setTitleText("登录说明");
         imageBack();
 
 

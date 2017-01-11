@@ -25,8 +25,8 @@ import java.util.regex.Pattern;
  */
 public class CourseParse {
     private static final String TAG = "LoginParse";
-    private static final int [] COLOR = {R.color.colorPrimary,R.color.colorPrimary,
-            R.color.colorPrimary,R.color.colorPrimary};//
+    private static final int [] COLOR = {R.color.hole_blue,R.color.light_blue,
+            R.color.light_green,R.color.light_pink};//
 
     public static boolean parseIsLoginSucceed(String data){
         Document doc = Jsoup.parse(data);

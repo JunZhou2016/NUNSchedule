@@ -37,98 +37,107 @@ import me.majiajie.pagerbottomtabstrip.listener.OnTabItemSelectListener;
  * 修改时间：2016/12/27 22:17
  * 修改备注：
  */
-public class MainActivity extends BaseActivity  {
+public class MainActivity extends BaseActivity {
 
 
-        //    int[] testColors = {0xFF7BA3A8,0xFFF4F3DE,0xFFBEAD92,0xFFF35A4A,0xFF5B4947};
+    //    int[] testColors = {0xFF7BA3A8,0xFFF4F3DE,0xFFBEAD92,0xFFF35A4A,0xFF5B4947};
 //    int[] testColors = {0xFF00796B,0xFF8D6E63,0xFF2196F3,0xFF607D8B,0xFFF57C00};
-        int[] testColors = {0xFF00796B, 0xFF5B4947, 0xFF607D8B, 0xFFF57C00, 0xFFF57C00};
+    int[] testColors = {0xFF00796B, 0xFF5B4947, 0xFF607D8B, 0xFFF57C00, 0xFFF57C00};
 
-        Controller controller;
+    Controller controller;
 
-        List<Fragment> mFragments;
+    List<Fragment> mFragments;
 
-        @Override
-        public void onCreate(@Nullable Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_main);
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        BottomTab();
+        initFragment();
+        controller.setSelect(0);
+    }
 
+    private void initFragment() {
+        mFragments = new ArrayList<>();
+        AboutFragment aboutFragme = new AboutFragment();
+        CourseFragment courseFragment = new CourseFragment();
+        mFragments.add(courseFragment);
+        mFragments.add(aboutFragme);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.push_up_in, R.anim.push_up_out);
+        transaction.add(R.id.frameLayout, courseFragment);
+        transaction.add(R.id.frameLayout, mFragments.get(1));
+        transaction.hide(courseFragment);
+        transaction.hide(aboutFragme);
+        transaction.commit();
+    }
 
-            initFragment();
+    private void BottomTab() {
+        PagerBottomTabLayout pagerBottomTabLayout = (PagerBottomTabLayout) findViewById(R.id.tab);
 
-            BottomTab();
+        //用TabItemBuilder构建一个导航按钮
+        TabItemBuilder tabItemBuilder = new TabItemBuilder(this).create()
+                //.setDefaultIcon(android.R.drawable.ic_menu_send)
+                .setDefaultIcon(R.drawable.coursefill)
+                .setText("课表")
+                .setSelectedColor(testColors[2])
+                .setTag("A")
+                .build();
 
-        }
-
-        private void initFragment() {
-            mFragments = new ArrayList<>();
-            Fragment courseFragment = new CourseFragment();
-            Fragment aboutFragme = new AboutFragment();
-            mFragments.add(courseFragment);
-            mFragments.add(aboutFragme);
-
-
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.setCustomAnimations(R.anim.push_up_in, R.anim.push_up_out);
-            transaction.add(R.id.frameLayout, mFragments.get(0));
-            transaction.commit();
-        }
-
-        private void BottomTab() {
-            PagerBottomTabLayout pagerBottomTabLayout = (PagerBottomTabLayout) findViewById(R.id.tab);
-
-            //用TabItemBuilder构建一个导航按钮
-            TabItemBuilder tabItemBuilder = new TabItemBuilder(this).create()
-                    //.setDefaultIcon(android.R.drawable.ic_menu_send)
-                    .setDefaultIcon(R.drawable.coursefill)
-                    .setText("课表")
-                    .setSelectedColor(testColors[2])
-                    .setTag("A")
-                    .build();
-
-            //构建导航栏,得到Controller进行后续控制
-            controller = pagerBottomTabLayout.builder()
-                    .addTabItem(tabItemBuilder)
-                    // .addTabItem(android.R.drawable.ic_menu_compass, "更多",testColors[1])
-                    .addTabItem(R.drawable.aboutfill, "更多", testColors[1])
-                    //.addTabItem(android.R.drawable.ic_menu_search, "搜索",testColors[2])
-                    //               .addTabItem(android.R.drawable.ic_menu_help, "帮助",testColors[2])
+        TabItemBuilder tabItemBuilder2 = new TabItemBuilder(this).create()
+                //.setDefaultIcon(android.R.drawable.ic_menu_send)
+                .setDefaultIcon(R.drawable.aboutfill)
+                .setText("更多")
+                .setSelectedColor(testColors[1])
+                .build();
+        //构建导航栏,得到Controller进行后续控制
+        controller = pagerBottomTabLayout.builder()
+                .addTabItem(tabItemBuilder)
+                .addTabItem(tabItemBuilder2)
+                // .addTabItem(android.R.drawable.ic_menu_compass, "更多",testColors[1])
+                //.addTabItem(R.drawable.aboutfill, "更多", testColors[1])
+                //.addTabItem(android.R.drawable.ic_menu_search, "搜索",testColors[2])
+                //               .addTabItem(android.R.drawable.ic_menu_help, "帮助",testColors[2])
 //                .setMode(TabLayoutMode.HIDE_TEXT)
 //                .setMode(TabLayoutMode.CHANGE_BACKGROUND_COLOR)
 //                .setMode(TabLayoutMode.HIDE_TEXT| TabLayoutMode.CHANGE_BACKGROUND_COLOR)
-                    .build();
+                .build();
 
 //        controller.setMessageNumber("A",2);
 //        controller.setDisplayOval(0,true);
+        //controller.setSelect(1);
+        controller.addTabItemClickListener(listener);
 
-            controller.addTabItemClickListener(listener);
+    }
+
+
+    OnTabItemSelectListener listener = new OnTabItemSelectListener() {
+        @Override
+        public void onSelected(int index, Object tag) {
+            Log.i("asd", "onSelected:" + index + "   TAG: " + tag.toString());
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            //  transaction.setCustomAnimations(R.anim.push_up_in,R.anim.push_up_out);
+            // transaction.replace(R.id.frameLayout, mFragments.get(index));
+            transaction.show(mFragments.get(index));
+            transaction.hide(mFragments.get(mFragments.size() - index - 1));
+            transaction.commit();
         }
 
-
-        OnTabItemSelectListener listener = new OnTabItemSelectListener() {
-            @Override
-            public void onSelected(int index, Object tag) {
-                Log.i("asd", "onSelected:" + index + "   TAG: " + tag.toString());
-
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                //transaction.setCustomAnimations(R.anim.push_up_in,R.anim.push_up_out);
-                transaction.replace(R.id.frameLayout, mFragments.get(index));
-                transaction.commit();
-            }
-
-            @Override
-            public void onRepeatClick(int index, Object tag) {
-                Log.i("asd", "onRepeatClick:" + index + "   TAG: " + tag.toString());
-            }
-        };
+        @Override
+        public void onRepeatClick(int index, Object tag) {
+            Log.i("asd", "onRepeatClick:" + index + "   TAG: " + tag.toString());
+        }
+    };
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        if (newConfig.orientation== ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+        if (newConfig.orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
             //TODO:
         }
         super.onConfigurationChanged(newConfig);
     }
+
 
 }
 

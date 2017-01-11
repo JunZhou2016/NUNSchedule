@@ -7,6 +7,8 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Message;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
@@ -19,6 +21,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mawanjun.mindakebiao.R;
+import com.mawanjun.mindakebiao.database.StuCourseDao;
+import com.mawanjun.mindakebiao.model.Course;
+import com.mawanjun.mindakebiao.net.CourseService;
 import com.mawanjun.mindakebiao.net.HttpConnection;
 import com.mawanjun.mindakebiao.net.LoginService;
 import com.mawanjun.mindakebiao.utils.SharedPreferenceUtil;
@@ -26,6 +31,8 @@ import com.mawanjun.mindakebiao.utils.ToastUtil;
 import com.wayww.edittextfirework.FireworkView;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 项目名称：MinDaKeBiao
@@ -47,6 +54,9 @@ public class LoginActivity extends  BaseActivity {
     private TextView mHelpText;
     private ImageView mLogo;
     private FireworkView mFireWorkView1, mFireWorkView2, mFireWorkView3;
+    private List<Course> mStuCourseList = new ArrayList<>();
+    private CourseService mCourseService;
+    private StuCourseDao mStuCourseDao;
 
 
     private void assignViews() {
@@ -64,6 +74,8 @@ public class LoginActivity extends  BaseActivity {
         mFireWorkView1.bindEditText(mEtUserName);
         mFireWorkView2.bindEditText(mEtPwd);
         mFireWorkView3.bindEditText(mEtCodes);
+        mCourseService = new CourseService();
+        mStuCourseDao = StuCourseDao.getInstance(this);
     }
 
 
@@ -76,7 +88,6 @@ public class LoginActivity extends  BaseActivity {
         assignViews();
         initWidget(savedInstanceState);
         initClick();
-        processLogin(savedInstanceState);
 
         mHelpText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,7 +147,7 @@ public class LoginActivity extends  BaseActivity {
                     mLoginService.login(userName, pwd, codes, new HttpConnection.HttpCallBack<Boolean>() {
                         @Override
                         public void callback(Boolean data) {
-                            dialog.dismiss();
+                           dialog.dismiss();
                             //登陆成功
                             if (data) {
                                 //存储数据
@@ -144,12 +155,8 @@ public class LoginActivity extends  BaseActivity {
                                 sharedPreferenceUtil.setKeyData("userNameKey", userName);
                                 sharedPreferenceUtil.setKeyData("pwdKey", pwd);
                                 sharedPreferenceUtil.setKeyData("isLogin", "TRUE");
-
-                                //跳转到课表界面（因为是从课表界面调到登陆界面的，所以将自己杀死就可以了）
-                                //setResult(RESULT_OK);
-                                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                                startActivity(intent);
-                                finish();
+                                //如果登录成功，从网页上获取课程表
+                                loadCourse();
                             } else {
                                 //提示账号或者密码错误
                                 ToastUtil.showToast(getApplicationContext(), "账号或密码错误");
@@ -170,6 +177,7 @@ public class LoginActivity extends  BaseActivity {
                 setUpCodesImage();
             }
         });
+        //刷新验证码
         mRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -177,12 +185,6 @@ public class LoginActivity extends  BaseActivity {
             }
         });
     }
-
-
-    protected void processLogin(Bundle savedInstanceState) {
-
-    }
-
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -197,4 +199,38 @@ public class LoginActivity extends  BaseActivity {
         startActivity(intent);
 
     }
+    public  void loadCourse() {
+        try {
+            //等待提示
+            final ProgressDialog dialog = new ProgressDialog(LoginActivity.this);
+            dialog.setTitle("加载课程中");
+            dialog.show();
+            //加载数据
+
+            SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(getApplicationContext(), "accountInfo");
+            mCourseService.getCourse(sharedPreferenceUtil.getKeyData("userNameKey"),
+                    new HttpConnection.HttpCallBack<List<Course>>() {
+                        @Override
+                        public void callback(List<Course> data) {
+                            //清空原有数据
+                            ToastUtil.showToast(getApplicationContext(),SharedPreferenceUtil.getKeyData("userNameKey").toString());
+                            mStuCourseList.clear();
+                            mStuCourseDao.removeAll();
+                            //加载数据
+                            mStuCourseList.addAll(data);
+                            //将数据存储到数据库中
+                            mStuCourseDao.saveStuClsList(mStuCourseList);
+                            //跳转到MainActivity中
+                            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                            dialog.dismiss();
+                        }
+                    });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
