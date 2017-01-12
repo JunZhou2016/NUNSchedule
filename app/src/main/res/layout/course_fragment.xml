@@ -7,15 +7,17 @@
  >
 <include layout="@layout/week_title"></include>
 
-
-    <GridLayout
-        android:id="@+id/main_grid_title"
+    <LinearLayout
+        android:id="@+id/weekNames"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/table_row_height"
-        android:background="@drawable/back"
-        android:rowCount="1"
-        android:columnCount="15">
-    </GridLayout>
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:weightSum="7.8"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+      />
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -28,9 +30,5 @@
             android:rowCount="13"
             android:columnCount="8">
         </GridLayout>
-        <!--<TextView-->
-            <!--android:id="@+id/text"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content" />-->
     </ScrollView>
 </LinearLayout>
