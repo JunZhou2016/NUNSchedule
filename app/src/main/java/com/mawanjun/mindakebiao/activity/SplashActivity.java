@@ -30,7 +30,7 @@ public class SplashActivity extends Activity {
         //借助第三方库快速构建闪屏界面
         View easySplashScreenView = new EasySplashScreen(this)
                 .withFullScreen()
-                .withSplashTimeOut(1000)
+                .withSplashTimeOut(0)
                 .withTargetActivity(chooseActivity())
                 .withBackgroundResource(R.drawable.bg)
                 //.withBackgroundColor(Color.parseColor("#607d8b"))
