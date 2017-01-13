@@ -1,35 +1,28 @@
 package com.mawanjun.mindakebiao.activity;
 
-import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mawanjun.mindakebiao.R;
 import com.mawanjun.mindakebiao.database.StuCourseDao;
 import com.mawanjun.mindakebiao.model.Course;
-import com.mawanjun.mindakebiao.net.CourseService;
-import com.mawanjun.mindakebiao.net.HttpConnection;
-import com.mawanjun.mindakebiao.utils.SharedPreferenceUtil;
-import com.mawanjun.mindakebiao.utils.ToastUtil;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.zip.Inflater;
 
 /**
  * 项目名称：MinDaKeBiao
@@ -40,94 +33,125 @@ import java.util.zip.Inflater;
  * 修改时间：2017/1/1 12:33
  * 修改备注：
  */
-public class CourseFragment extends BaseFragment {
+public class CourseFragment extends BaseFragment implements AdapterView.OnItemSelectedListener {
 
-    private static final int REQUEST_LOGIN = 0;
- //   private static final String [] TITLE_DATA = {"9月","周一","周二","周三","周四","周五","周六","周日"};
-    private static final int GRID_ROW_COUNT = 12;
-    private static final int GRID_COL_COUNT = 8;
-    private List<Course> mStuCourseList = new ArrayList<>();
-    private CourseService mCourseService;
+    private LinearLayout weekNames;
+    private LinearLayout sections;
+
+
+    private GridLayout mGlClsContent;
+    private int maxSection = 12;
+    private int itemHeight;
+    private ArrayList<Course> mStuCourseList;
     private StuCourseDao mStuCourseDao;
     private List<Course> courses;
-    private GridLayout mGlClsTitle;
-    private GridLayout mGlClsContent;
-    private  ProgressDialog dialog;
-    LinearLayout weekNames;
-  //  private TextView text;
     private int mTableDistance;
-//    private static CourseFragment mInstance;// 单例模式
-//
-//    private CourseFragment() {
-//    }
-//
-//    public static CourseFragment getInstance() {
-//        if (mInstance == null) {
-//            synchronized (CourseFragment.class) {
-//                if (mInstance == null) {
-//                    mInstance = new CourseFragment();
-//                }
-//            }
-//        }
-//        return mInstance;
-//    }
+    private static final int GRID_COL_COUNT = 7;
 
-   // private Button button;
+    private Spinner spinner;
+    private ArrayAdapter<String> adapter;
+    private String[] weekList;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View view = inflater.inflate(R.layout.course_fragment,container,false);
-      //  text = (TextView) view.findViewById(R.id.text);
-     //  mGlClsTitle = (GridLayout) view.findViewById(R.id.main_grid_title);
-        mGlClsContent = (GridLayout) view.findViewById(R.id.main_grid_content);
+        View view = inflater.inflate(R.layout.course_fragment, container, false);
         weekNames = (LinearLayout) view.findViewById(R.id.weekNames);
-       // button = (Button) view.findViewById(R.id.load_course);
-        initWidget();
-        processLogic();
-       // button.setOnClickListener(this);
-       // processLogic(savedInstanceState);
-        return  view;
+        sections = (LinearLayout) view.findViewById(R.id.sections);
+        spinner = (Spinner) view.findViewById(R.id.spinner);
+        mGlClsContent = (GridLayout) view.findViewById(R.id.main_grid_content);
+        itemHeight = getResources().getDimensionPixelSize(R.dimen.sectionHeight);
+        mTableDistance = getScreenPixelWidth() * 70 / 80 / 7;
+        weekList = new String[]{"第1周", "第2周", "第3周", "第4周", "第5周", "第6周", "第7周", "第8周", "第9周", "第10周", "第11周"
+                , "第12周", "第13周", "第14周", "第15周", "第16周", "第17周", "第18周", "第19周", "第20周"};
+        adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, weekList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
+        initWeekCourseView();
+        return view;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
 
-    }
-//
-//    @Override
-//    protected void initView() {
-//
-//    }
+    /**
+     * 初始化课程表
+     */
 
-
-    protected void initWidget() {
-        mTableDistance = getScreenPixelWidth()/15;
-        mCourseService = new CourseService();
+    private void initWeekCourseView() {
+        mStuCourseList = new ArrayList<>();
         mStuCourseDao = StuCourseDao.getInstance(getContext());
-    //   setUpClsTitle();
-        initWeekNameView();
-        setUpClsContent();
-
-
-    }
-
-
-    protected void initClick() {
-
-    }
-
-
-    protected void processLogic() {
-        final ProgressDialog dialog = new ProgressDialog(getContext());
-        dialog.show();
-        //首先从数据库获取值
         courses = mStuCourseDao.getStuClsList();
         mStuCourseList.addAll(courses);
-       // ToastUtil.showToast(getContext(),courses.toString());
-        showCls();
-        dialog.dismiss();
+        initWeekNameView();
+        setUpClsContent();
+        initSectionView();
+
     }
+
+
+    //初始化课表显示的格子
+    private void setUpClsContent() {
+
+        //初始化表格的距离
+        for (int i = 0; i < GRID_COL_COUNT; i++) {
+            int row = 0;
+            int col = i;
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams(
+                    GridLayout.spec(row), GridLayout.spec(col)
+            );
+            params.width = mTableDistance;
+            params.height = 0;
+
+            View view = new View(getContext());
+            mGlClsContent.addView(view, params);
+        }
+    }
+
+    private void showCls(int week) {
+        //清空原有视图，再添加新的视图
+        mGlClsContent.removeAllViews();
+        setUpClsContent();
+        for (int i = 0; i < mStuCourseList.size(); i++) {
+            Course course = mStuCourseList.get(i);
+
+            String temp = course.getClsName();
+            int x = temp.indexOf("*");
+            int y = temp.indexOf("#");
+            int z = temp.indexOf("|");
+            String start = temp.substring(x + 1, y);
+            String end = temp.substring(y + 1, z);
+            String bWeek = temp.substring(z + 1, z + 2);
+
+            if (isThisWeek(week, start, end, bWeek)) {
+                int row = course.getClsNum();
+                int col = course.getDay() - 1;
+                int size = course.getClsCount();
+                //设定View在表格的哪行那列
+                GridLayout.LayoutParams params = new GridLayout.LayoutParams(
+                        GridLayout.spec(row, size),
+                        GridLayout.spec(col)
+                );
+                //设置View的宽高
+                params.width = mTableDistance;
+                params.height = (int) getResources().getDimension(R.dimen.table_row_height) * size;
+                params.setGravity(Gravity.FILL);
+                //通过代码改变<Shape>的背景颜色
+                GradientDrawable drawable = (GradientDrawable) getResources().getDrawable(R.drawable.cls_bg);
+                drawable.setColor(getResources().getColor(course.getColor()));
+                //设置View
+                TextView textView = new TextView(getContext());
+                textView.setTextColor(getResources().getColor(R.color.white));
+                int k = course.getClsName().indexOf("*");
+                textView.setText(course.getClsName().substring(0, k));
+                textView.setGravity(Gravity.CENTER);
+                textView.setBackground(drawable);
+                //添加到表格中
+                mGlClsContent.addView(textView, params);
+            }
+        }
+
+    }
+
     /**
      * 顶部周一到周日的布局
      **/
@@ -155,6 +179,21 @@ public class CourseFragment extends BaseFragment {
     }
 
     /**
+     * 左边节次布局，设定每天最多12节课
+     */
+    private void initSectionView() {
+        for (int i = 1; i <= maxSection; i++) {
+            TextView tvSection = new TextView(getContext());
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, getResources().getDimensionPixelSize(R.dimen.sectionHeight));
+            lp.gravity = Gravity.CENTER;
+            tvSection.setGravity(Gravity.CENTER);
+            tvSection.setText(String.valueOf(i));
+            tvSection.setLayoutParams(lp);
+            sections.addView(tvSection);
+        }
+    }
+
+    /**
      * 当前星期
      */
     public int getWeekDay() {
@@ -164,12 +203,22 @@ public class CourseFragment extends BaseFragment {
         }
         return w;
     }
+
     /**
      * 当前月份
      */
     public int getMonth() {
         int w = Calendar.getInstance().get(Calendar.MONTH) + 1;
         return w;
+    }
+
+
+    /**
+     * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
+     */
+    public static int dip2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
     }
 
     /**
@@ -212,100 +261,40 @@ public class CourseFragment extends BaseFragment {
         return str;
     }
 
-//    //设置表格显示星期的地方
-//    private void setUpClsTitle(){
-//        for (int i=0; i<TITLE_DATA.length; ++i){
-//            String content = TITLE_DATA[i];
-//            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-//            //第一列的时候
-//            if (i == 0){
-//                params.width = mTableDistance;
-//            }
-//            else {
-//                //添加分割线
-//                LayoutInflater inflater=LayoutInflater.from(getContext());
-//                View divider = inflater.inflate(R.layout.grid_title_form,mGlClsTitle,false);
-//                mGlClsTitle.addView(divider);
-//
-//                params.width = mTableDistance * 2;
-//            }
-//            params.height = GridLayout.LayoutParams.MATCH_PARENT;
-//            TextView textView = new TextView(getContext());
-//            textView.setTextColor(getResources().getColor(R.color.blue));
-//            textView.setText(content);
-//            textView.setGravity(Gravity.CENTER);
-//            mGlClsTitle.addView(textView,params);
-//        }
-//    }
-
-
-
-    //初始化课表显示的格子
-    private void setUpClsContent(){
-        //设置每行第几节课的提示
-        for(int i=0; i<GRID_ROW_COUNT+1; ++i){
-            int row = i;
-            int col = 0;
-            GridLayout.LayoutParams params = new GridLayout.LayoutParams(
-                    GridLayout.spec(row),GridLayout.spec(col)
-            );
-            params.width = mTableDistance;
-            if (i == 0){
-                params.height = 0;
+    /**
+     * 判断本节课是否在指定周上
+     *
+     * @param week 指定周
+     * @return ture 是
+     */
+    public Boolean isThisWeek(int week, String start, String end, String bWeek) {
+        Boolean result = false;
+        // 在最大最小周之间
+        int max = Integer.parseInt(end);
+        int min = Integer.parseInt(start);
+        if (week <= max && week >= min) {
+            if ("全".equals(bWeek))
+                result = true;
+            if ("单".equals(bWeek) && week % 2 == 1) {
+                result = true;
             }
-            else {
-                params.height = (int) getResources().getDimension(R.dimen.table_row_height);
+            if ("双".equals(bWeek) && week % 2 == 0) {
+                result = true;
             }
-            TextView textView = new TextView(getContext());
-            textView.setTextColor(getResources().getColor(R.color.blue));
-            textView.setText(i+"");
-            textView.setGravity(Gravity.CENTER);
-            textView.setBackground(getResources().getDrawable(R.drawable.back));
-            mGlClsContent.addView(textView,params);
         }
-        //初始化表格的距离
-        for (int i=1; i<GRID_COL_COUNT; ++i){
-            int row = 0;
-            int col = i;
-            GridLayout.LayoutParams params = new GridLayout.LayoutParams(
-                    GridLayout.spec(row),GridLayout.spec(col)
-            );
-            params.width = mTableDistance*2;
-            params.height = 0;
-
-            View view = new View(getContext());
-            mGlClsContent.addView(view,params);
-        }
+        return result;
     }
 
-    private void showCls() {
-        //text.setText(courses.toString());
-        for (int i = 0; i < mStuCourseList.size(); ++i) {
-            Course course = mStuCourseList.get(i);
-            int row = course.getClsNum();
-            int col = course.getDay();
-            int size = course.getClsCount();
-            //设定View在表格的哪行那列
-            GridLayout.LayoutParams params = new GridLayout.LayoutParams(
-                    GridLayout.spec(row, size),
-                    GridLayout.spec(col)
-            );
-            //设置View的宽高
-            params.width = mTableDistance * 2;
-            params.height = (int) getResources().getDimension(R.dimen.table_row_height) * size;
-            params.setGravity(Gravity.FILL);
-            //通过代码改变<Shape>的背景颜色
-            GradientDrawable drawable = (GradientDrawable) getResources().getDrawable(R.drawable.cls_bg);
-            drawable.setColor(getResources().getColor(course.getColor()));
-            //设置View
-            TextView textView = new TextView(getContext());
-            textView.setTextColor(getResources().getColor(R.color.white));
-            textView.setText(course.getClsName());
-            textView.setGravity(Gravity.CENTER);
-            textView.setBackground(drawable);
-            //添加到表格中
-            mGlClsContent.addView(textView, params);
-        }
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String week = adapter.getItem(position).trim();
+        int x = week.indexOf("周");
+        int y = Integer.parseInt(week.substring(1, x));
+        showCls(y);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
 
     }
 }

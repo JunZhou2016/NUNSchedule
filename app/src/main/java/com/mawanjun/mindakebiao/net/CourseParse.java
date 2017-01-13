@@ -52,7 +52,7 @@ public class CourseParse {
         //遍历td节点
         for (int i=0; i<trs.size(); ++i){
             Element tr = trs.get(i);
-            //获取tr下的td节点，要求
+            //获取tr下的td节点，要求algin下的元素
             Elements tds = tr.select("td[align]");
             //遍历td节点
             for(int j=0; j<tds.size(); ++j){
@@ -89,6 +89,35 @@ public class CourseParse {
         courseLocMatcher.find();
         String data = courseLocMatcher.group(0);
 
-        return str+"@"+data;
+
+        String weekText = text.substring(text.indexOf("{")+1,text.indexOf("}"));
+
+        Pattern startPattern = Pattern.compile("\\d+");
+        Matcher startMatcher = startPattern.matcher(weekText);
+        startMatcher.find();
+        String startWeek =startMatcher.group();
+
+
+        Pattern endPattern = Pattern.compile("\\d+");
+        Matcher endMatcher = endPattern.matcher(weekText);
+        endMatcher.find();
+        endMatcher.find();
+        String endWeek =endMatcher.group();
+
+        String bWeek = booleanWeek(weekText);
+
+
+        return str+"@"+data+ "*" + startWeek+ "#" + endWeek +"|" + bWeek;
+    }
+
+    private static String booleanWeek (String text ){
+         String  i = "全";
+        int j = text.indexOf("|");
+        if (j != -1){
+            i = text.substring(j+1,j+2);
+        }else {
+            i = "全";
+        }
+        return i;
     }
 }

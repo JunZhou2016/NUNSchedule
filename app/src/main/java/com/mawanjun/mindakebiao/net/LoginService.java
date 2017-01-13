@@ -114,7 +114,7 @@ public class LoginService {
                         isLogin = true;
                     }
                     else {
-                        //显示登陆失败。
+                        //显示登录失败。
                         isLogin = false;
                     }
                     changeEnvironment(httpCallBack,isLogin);

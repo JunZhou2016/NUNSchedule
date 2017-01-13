@@ -53,6 +53,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         BottomTab();
+
         initFragment();
         controller.setSelect(0);
     }
@@ -131,14 +132,9 @@ public class MainActivity extends BaseActivity {
     };
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        if (newConfig.orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-            //TODO:
-        }
-        super.onConfigurationChanged(newConfig);
+    protected void onSaveInstanceState(Bundle outState) {
+      //  super.onSaveInstanceState(outState);
     }
-
-
 }
 
 

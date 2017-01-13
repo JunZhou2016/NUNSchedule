@@ -30,6 +30,8 @@ dependencies {
     compile 'com.squareup.okio:okio:1.10.0'
     compile 'org.jsoup:jsoup:1.9.2'
     compile 'com.google.code.gson:gson:2.7'
+    compile 'com.jakewharton:butterknife:8.4.0'
+   // annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
     compile 'me.majiajie:pager-bottom-tab-strip:1.0.0'
 }
 
