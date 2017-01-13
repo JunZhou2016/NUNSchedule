@@ -54,5 +54,18 @@ public class SharedPreferenceUtil {
         return value;
     }
 
+    public void setInteger(String key,int defValue){
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences(mFileName, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(key,defValue);
+        editor.commit();
+    }
+
+    public int getInteger(String key){
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences(mFileName, Context.MODE_PRIVATE);
+        int value = sharedPreferences.getInt(key,1);//第二个参数为默认值
+        return value;
+    }
+
 
 }

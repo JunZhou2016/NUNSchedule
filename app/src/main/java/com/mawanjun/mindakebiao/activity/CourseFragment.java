@@ -2,6 +2,7 @@ package com.mawanjun.mindakebiao.activity;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,12 +14,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.mawanjun.mindakebiao.R;
 import com.mawanjun.mindakebiao.database.StuCourseDao;
 import com.mawanjun.mindakebiao.model.Course;
+import com.mawanjun.mindakebiao.utils.SharedPreferenceUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -33,7 +37,7 @@ import java.util.List;
  * 修改时间：2017/1/1 12:33
  * 修改备注：
  */
-public class CourseFragment extends BaseFragment implements AdapterView.OnItemSelectedListener {
+public class CourseFragment extends BaseFragment  {
 
     private LinearLayout weekNames;
     private LinearLayout sections;
@@ -48,9 +52,11 @@ public class CourseFragment extends BaseFragment implements AdapterView.OnItemSe
     private int mTableDistance;
     private static final int GRID_COL_COUNT = 7;
 
-    private Spinner spinner;
-    private ArrayAdapter<String> adapter;
-    private String[] weekList;
+    // 一共有多少周
+    private int mMaxWeek =  20;
+    // 现在是第几周
+    private int mNowWeek;
+    private TextView mChangeWeek;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -58,16 +64,10 @@ public class CourseFragment extends BaseFragment implements AdapterView.OnItemSe
         View view = inflater.inflate(R.layout.course_fragment, container, false);
         weekNames = (LinearLayout) view.findViewById(R.id.weekNames);
         sections = (LinearLayout) view.findViewById(R.id.sections);
-        spinner = (Spinner) view.findViewById(R.id.spinner);
+        mChangeWeek = (TextView) view.findViewById(R.id.changeWeek);
         mGlClsContent = (GridLayout) view.findViewById(R.id.main_grid_content);
         itemHeight = getResources().getDimensionPixelSize(R.dimen.sectionHeight);
         mTableDistance = getScreenPixelWidth() * 70 / 80 / 7;
-        weekList = new String[]{"第1周", "第2周", "第3周", "第4周", "第5周", "第6周", "第7周", "第8周", "第9周", "第10周", "第11周"
-                , "第12周", "第13周", "第14周", "第15周", "第16周", "第17周", "第18周", "第19周", "第20周"};
-        adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, weekList);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);
         initWeekCourseView();
         return view;
     }
@@ -85,6 +85,20 @@ public class CourseFragment extends BaseFragment implements AdapterView.OnItemSe
         initWeekNameView();
         setUpClsContent();
         initSectionView();
+        SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(getContext(), "accountInfo");
+        mNowWeek = sharedPreferenceUtil.getInteger("mNowWeek");
+        showCls(mNowWeek);
+        mChangeWeek.setText("第"+mNowWeek+"周");
+
+        // 点击选择切换周
+        mChangeWeek.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                showChangeWeekDlg(v);
+
+            }
+        });
 
     }
 
@@ -285,16 +299,60 @@ public class CourseFragment extends BaseFragment implements AdapterView.OnItemSe
         return result;
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String week = adapter.getItem(position).trim();
-        int x = week.indexOf("周");
-        int y = Integer.parseInt(week.substring(1, x));
-        showCls(y);
+
+
+
+    /**
+     * 显示切换当前周的窗口
+     */
+    public void showChangeWeekDlg(View v) {
+        View view = View.inflate(getContext(), R.layout.changweek_layout, null);
+        ListView weekList = (ListView) view.findViewById(R.id.weekList);
+
+        ArrayList<String> strList = new ArrayList<String>();
+        for (int i = 1; i < mMaxWeek; i++) {
+            strList.add("第" + i + "周");
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
+                R.layout.item, strList);
+
+        weekList.setAdapter(adapter);
+        view.measure(0, 0);
+        int w = getScreenPixelWidth();
+        final PopupWindow pop = new PopupWindow(view, w , 630, true);
+        pop.setBackgroundDrawable(new ColorDrawable(0x00000000));
+        int xOffSet = -(pop.getWidth() - v.getWidth()) / 2;
+        pop.showAsDropDown(v, xOffSet, 0);
+
+        weekList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapter, View view,
+                                    int positon, long id) {
+                mNowWeek = positon + 1;
+                pop.dismiss();
+
+                mChangeWeek.setText("第"+ mNowWeek +"周");
+               showCls(mNowWeek);
+               // drawNowWeek();
+               // drawAllCourse();
+            }
+        });
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
+    public void onPause() {
+        super.onPause();
+        String temp = (String) mChangeWeek.getText();
+        int len = temp.length();
+        int m = Integer.parseInt(temp.substring(1,len-1)) ;
+        SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(getContext(), "accountInfo");
+        sharedPreferenceUtil.setInteger("mNowWeek",m);
     }
 }
+
+//    String week = adapter.getItem(position).trim();
+//    int x = week.indexOf("周");
+//    int y = Integer.parseInt(week.substring(1, x));
+//    showCls(y);

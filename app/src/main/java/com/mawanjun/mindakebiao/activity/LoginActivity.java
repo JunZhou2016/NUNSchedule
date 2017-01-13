@@ -213,7 +213,6 @@ public class LoginActivity extends  BaseActivity {
                         @Override
                         public void callback(List<Course> data) {
                             //清空原有数据
-                            ToastUtil.showToast(getApplicationContext(),SharedPreferenceUtil.getKeyData("userNameKey").toString());
                             mStuCourseList.clear();
                             mStuCourseDao.removeAll();
                             //加载数据

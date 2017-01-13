@@ -34,7 +34,7 @@ public class SplashActivity extends Activity {
                 .withTargetActivity(chooseActivity())
                 .withBackgroundResource(R.drawable.bg)
                 //.withBackgroundColor(Color.parseColor("#607d8b"))
-                .withFooterText("Copyright © devma    V-1.0")
+                .withFooterText("Copyright © 2017 devma  V-1.0")
                 //.withBeforeLogoText("北方民族大学")
                 .withLogo(R.drawable.splash)
                 .withAfterLogoText("团结进取  砥砺成才")
