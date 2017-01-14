@@ -49,6 +49,7 @@ public class AboutFragment  extends Fragment{
                         sharedPreferenceUtil.setKeyData("userNameKey","");
                         Intent intent = new Intent(getActivity(),LoginActivity.class);
                         startActivity(intent);
+                        sharedPreferenceUtil.setKeyData("isLogin","");
                         getActivity().finish();
                     }
                 });
