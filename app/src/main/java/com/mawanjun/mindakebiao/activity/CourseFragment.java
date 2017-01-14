@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,7 +43,6 @@ public class CourseFragment extends BaseFragment  {
     private LinearLayout weekNames;
     private LinearLayout sections;
 
-
     private GridLayout mGlClsContent;
     private int maxSection = 12;
     private int itemHeight;
@@ -57,6 +57,7 @@ public class CourseFragment extends BaseFragment  {
     // 现在是第几周
     private int mNowWeek;
     private TextView mChangeWeek;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -90,13 +91,14 @@ public class CourseFragment extends BaseFragment  {
         showCls(mNowWeek);
         mChangeWeek.setText("第"+mNowWeek+"周");
 
+
+
         // 点击选择切换周
         mChangeWeek.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 showChangeWeekDlg(v);
-
             }
         });
 
@@ -124,7 +126,7 @@ public class CourseFragment extends BaseFragment  {
     private void showCls(int week) {
         //清空原有视图，再添加新的视图
         mGlClsContent.removeAllViews();
-        setUpClsContent();
+       // setUpClsContent();
         for (int i = 0; i < mStuCourseList.size(); i++) {
             Course course = mStuCourseList.get(i);
 

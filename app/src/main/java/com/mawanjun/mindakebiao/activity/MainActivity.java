@@ -1,5 +1,6 @@
 package com.mawanjun.mindakebiao.activity;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -43,7 +44,6 @@ public class MainActivity extends BaseActivity {
     //    int[] testColors = {0xFF7BA3A8,0xFFF4F3DE,0xFFBEAD92,0xFFF35A4A,0xFF5B4947};
 //    int[] testColors = {0xFF00796B,0xFF8D6E63,0xFF2196F3,0xFF607D8B,0xFFF57C00};
     int[] testColors = {0xFF00796B, 0xFF5B4947, 0xFF607D8B, 0xFFF57C00, 0xFFF57C00};
-
     Controller controller;
 
     List<Fragment> mFragments;
@@ -53,24 +53,23 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         BottomTab();
-
         initFragment();
-        controller.setSelect(0);
     }
 
     private void initFragment() {
         mFragments = new ArrayList<>();
-        AboutFragment aboutFragme = new AboutFragment();
-        CourseFragment courseFragment = new CourseFragment();
-        mFragments.add(courseFragment);
-        mFragments.add(aboutFragme);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.setCustomAnimations(R.anim.push_up_in, R.anim.push_up_out);
-        transaction.add(R.id.frameLayout, courseFragment);
-        transaction.add(R.id.frameLayout, mFragments.get(1));
-        transaction.hide(courseFragment);
-        transaction.hide(aboutFragme);
-        transaction.commit();
+            AboutFragment aboutFragme = new AboutFragment();
+            CourseFragment courseFragment = new CourseFragment();
+            mFragments.add(courseFragment);
+            mFragments.add(aboutFragme);
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(R.anim.push_up_in, R.anim.push_up_out);
+            transaction.add(R.id.frameLayout, courseFragment);
+            transaction.add(R.id.frameLayout, mFragments.get(1));
+           //transaction.hide(courseFragment); hide的话会多显示两次Fragment，有种抖动的感觉
+            transaction.hide(aboutFragme);
+            transaction.commit();
+
     }
 
     private void BottomTab() {
@@ -106,7 +105,7 @@ public class MainActivity extends BaseActivity {
 
 //        controller.setMessageNumber("A",2);
 //        controller.setDisplayOval(0,true);
-        //controller.setSelect(1);
+        controller.setSelect(0);
         controller.addTabItemClickListener(listener);
 
     }
@@ -120,8 +119,8 @@ public class MainActivity extends BaseActivity {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             //  transaction.setCustomAnimations(R.anim.push_up_in,R.anim.push_up_out);
             // transaction.replace(R.id.frameLayout, mFragments.get(index));
-            transaction.show(mFragments.get(index));
             transaction.hide(mFragments.get(mFragments.size() - index - 1));
+            transaction.show(mFragments.get(index));
             transaction.commit();
         }
 
@@ -134,6 +133,17 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
       //  super.onSaveInstanceState(outState);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        //实现Home键效果
+        //super.onBackPressed();这句话一定要注掉,不然又去调用默认的back处理方式了
+        Intent i= new Intent(Intent.ACTION_MAIN);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.addCategory(Intent.CATEGORY_HOME);
+        startActivity(i);
     }
 }
 
