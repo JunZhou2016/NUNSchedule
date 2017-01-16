@@ -107,26 +107,39 @@ public class CourseFragment extends BaseFragment  {
 
     //初始化课表显示的格子
     private void setUpClsContent() {
-
-        //初始化表格的距离
-        for (int i = 0; i < GRID_COL_COUNT; i++) {
-            int row = 0;
-            int col = i;
+//设置每行第几节课的提示
+        for(int i=0; i<12; i++){
+            int row = i;
+            int col = 0;
             GridLayout.LayoutParams params = new GridLayout.LayoutParams(
-                    GridLayout.spec(row), GridLayout.spec(col)
+                    GridLayout.spec(row),GridLayout.spec(col)
             );
             params.width = mTableDistance;
-            params.height = 0;
+                params.height = (int) getResources().getDimension(R.dimen.table_row_height);
 
             View view = new View(getContext());
             mGlClsContent.addView(view, params);
         }
+        //初始化表格的距离
+
+            for (int i = 0; i < 7; i++) {
+                int row = 0;
+                int col = i;
+                GridLayout.LayoutParams params = new GridLayout.LayoutParams(
+                        GridLayout.spec(row), GridLayout.spec(col)
+                );
+                params.width = mTableDistance;
+                params.height = 0;
+
+                View view = new View(getContext());
+                mGlClsContent.addView(view, params);
+            }
     }
 
     private void showCls(int week) {
         //清空原有视图，再添加新的视图
         mGlClsContent.removeAllViews();
-       // setUpClsContent();
+       setUpClsContent();
         for (int i = 0; i < mStuCourseList.size(); i++) {
             Course course = mStuCourseList.get(i);
 
@@ -139,7 +152,7 @@ public class CourseFragment extends BaseFragment  {
             String bWeek = temp.substring(z + 1, z + 2);
 
             if (isThisWeek(week, start, end, bWeek)) {
-                int row = course.getClsNum();
+                int row = course.getClsNum()-1;
                 int col = course.getDay() - 1;
                 int size = course.getClsCount();
                 //设定View在表格的哪行那列
