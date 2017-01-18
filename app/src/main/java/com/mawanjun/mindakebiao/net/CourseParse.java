@@ -61,9 +61,9 @@ public class CourseParse {
                 //如果数值为空则不计算。
                 if (str.length() != 1){
                     //解析文本数据
-                    str = parsePersonalCourse(str);
+                   String str1 = parsePersonalCourse(str);
                     Course course = new Course();
-                    course.setClsName(str);
+                    course.setClsName(str1);
                     course.setDay(j+1);
                     course.setClsCount(Integer.valueOf(td.attr("rowspan")));
                     course.setClsNum(i+1);
@@ -71,6 +71,19 @@ public class CourseParse {
                     int num = random.nextInt(COLOR.length);
                     course.setColor(COLOR[num]);
                     courses.add(course);
+                    int m =  str.indexOf("}");
+                    if (str.indexOf("{",m+2) != -1){
+                        int p = parsePersonalCourse2(str);
+                       String temp = str.substring(p);
+                        String str2 = parsePersonalCourse(temp);
+                        Course course2 = new Course();
+                        course2.setClsName(str2);
+                        course2.setDay(j+1);
+                        course2.setClsCount(Integer.valueOf(td.attr("rowspan")));
+                        course2.setClsNum(i+1);
+                        course2.setColor(COLOR[num]);
+                        courses.add(course2);
+                    }
                 }
             }
         }
@@ -109,9 +122,28 @@ public class CourseParse {
 
         return str+"@"+data+ "*" + startWeek+ "#" + endWeek +"|" + bWeek;
     }
-
+    private static int parsePersonalCourse2(String text){
+        int i = 0;
+        if (text.indexOf(")") != -1){
+            Pattern courseLocPattern = Pattern.compile("\\s{1}(\\d+)");
+            Matcher courseLocMatcher = courseLocPattern.matcher(text);
+            courseLocMatcher.find();
+            courseLocMatcher.find();
+            courseLocMatcher.find();
+            String data = courseLocMatcher.group(0);
+            i = text.indexOf(data) + 8;
+        }else {
+            Pattern courseLocPattern = Pattern.compile("\\s{1}(\\d+)");
+            Matcher courseLocMatcher = courseLocPattern.matcher(text);
+            courseLocMatcher.find();
+            courseLocMatcher.find();
+            String data = courseLocMatcher.group(0);
+            i = text.indexOf(data) + 8;
+        }
+        return i ;
+    }
     private static String booleanWeek (String text ){
-         String  i = "全";
+        String  i = "全";
         int j = text.indexOf("|");
         if (j != -1){
             i = text.substring(j+1,j+2);

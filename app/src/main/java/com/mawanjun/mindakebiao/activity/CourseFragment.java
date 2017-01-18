@@ -1,11 +1,14 @@
 package com.mawanjun.mindakebiao.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -171,7 +174,8 @@ public class CourseFragment extends BaseFragment  {
                 TextView textView = new TextView(getContext());
                 textView.setTextColor(getResources().getColor(R.color.white));
                 int k = course.getClsName().indexOf("*");
-                textView.setText(course.getClsName().substring(0, k));
+                String s1= course.getClsName().substring(0, k);
+                textView.setText(s1);
                 textView.setGravity(Gravity.CENTER);
                 textView.setBackground(drawable);
                 //添加到表格中
