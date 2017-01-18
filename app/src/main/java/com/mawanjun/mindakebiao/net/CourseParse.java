@@ -143,13 +143,13 @@ public class CourseParse {
         return i ;
     }
     private static String booleanWeek (String text ){
-        String  i = "全";
+        String  temp = "全";
         int j = text.indexOf("|");
         if (j != -1){
-            i = text.substring(j+1,j+2);
+            temp = text.substring(j+1,j+2);
         }else {
-            i = "全";
+            temp = "全";
         }
-        return i;
+        return temp;
     }
 }
