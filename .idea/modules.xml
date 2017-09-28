@@ -3,7 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MinDaKeBiao.iml" filepath="$PROJECT_DIR$/MinDaKeBiao.iml" />
+<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/MinDaKeBiao-master.iml" filepath="$PROJECT_DIR$/MinDaKeBiao-master.iml" />
+=======
+>>>>>>> b24f378d315a7cbe505b3cd47aadcbbc91d311ce
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/edittextfirework/edittextfirework.iml" filepath="$PROJECT_DIR$/edittextfirework/edittextfirework.iml" />
     </modules>

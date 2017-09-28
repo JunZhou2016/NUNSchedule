@@ -12,7 +12,17 @@
             <option value="$PROJECT_DIR$/edittextfirework" />
           </set>
         </option>
+<<<<<<< HEAD
         <option name="resolveModulePerSourceSet" value="false" />
+=======
+        <option name="myModules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/edittextfirework" />
+          </set>
+        </option>
+>>>>>>> b24f378d315a7cbe505b3cd47aadcbbc91d311ce
       </GradleProjectSettings>
     </option>
   </component>
