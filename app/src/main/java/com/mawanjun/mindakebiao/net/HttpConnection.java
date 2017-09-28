@@ -78,7 +78,7 @@ public class HttpConnection {
         Call call = mClient.newCall(request);
         call.enqueue(callback);
     }
-
+   //<T>表示限定data的数据类型
     public interface HttpCallBack <T>{
         void callback(T data);
     }

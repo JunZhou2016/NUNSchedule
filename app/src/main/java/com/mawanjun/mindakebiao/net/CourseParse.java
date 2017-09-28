@@ -91,17 +91,21 @@ public class CourseParse {
     }
 
     private static String parsePersonalCourse(String text){
+        String str = "哈";
+        String  data = "哈";
+
         //正则表达式获取课名，和教室
         Pattern courseNamePattern = Pattern.compile("^.+?(\\s{1})");
         Matcher courseNameMatcher = courseNamePattern.matcher(text);
-        courseNameMatcher.find();
-        String str = courseNameMatcher.group(0);
+        if (courseNameMatcher.find()) {
+            str = courseNameMatcher.group(0);
+        }
 
-        Pattern courseLocPattern = Pattern.compile("\\s{1}(\\d+)");
+        Pattern courseLocPattern = Pattern.compile("\\s{1}([0-9A-Z]){6}");
         Matcher courseLocMatcher = courseLocPattern.matcher(text);
-        courseLocMatcher.find();
-        String data = courseLocMatcher.group(0);
-
+        if (courseLocMatcher.find()) {
+             data = courseLocMatcher.group(0);
+        }
 
         String weekText = text.substring(text.indexOf("{")+1,text.indexOf("}"));
 

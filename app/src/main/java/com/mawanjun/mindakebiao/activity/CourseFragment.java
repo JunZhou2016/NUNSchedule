@@ -1,15 +1,12 @@
 package com.mawanjun.mindakebiao.activity;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +17,6 @@ import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.mawanjun.mindakebiao.R;
@@ -31,6 +27,7 @@ import com.mawanjun.mindakebiao.utils.SharedPreferenceUtil;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
 
 /**
  * 项目名称：MinDaKeBiao
@@ -60,6 +57,9 @@ public class CourseFragment extends BaseFragment  {
     // 现在是第几周
     private int mNowWeek;
     private TextView mChangeWeek;
+
+    private static final int [] COLOR = {R.color.hole_blue,R.color.light_blue,
+            R.color.light_green,R.color.light_pink};//
 
 
     @Override
@@ -120,7 +120,7 @@ public class CourseFragment extends BaseFragment  {
             params.width = mTableDistance;
                 params.height = (int) getResources().getDimension(R.dimen.table_row_height);
 
-            View view = new View(getContext());
+            final View view = new View(getContext());
             mGlClsContent.addView(view, params);
         }
         //初始化表格的距离
@@ -167,19 +167,31 @@ public class CourseFragment extends BaseFragment  {
                 params.width = mTableDistance;
                 params.height = (int) getResources().getDimension(R.dimen.table_row_height) * size;
                 params.setGravity(Gravity.FILL);
+                Random random = new Random();
+                int num = random.nextInt(COLOR.length);
                 //通过代码改变<Shape>的背景颜色
                 GradientDrawable drawable = (GradientDrawable) getResources().getDrawable(R.drawable.cls_bg);
-                drawable.setColor(getResources().getColor(course.getColor()));
+                drawable.setColor(getResources().getColor(COLOR[num]));
                 //设置View
-                TextView textView = new TextView(getContext());
+                final TextView textView = new TextView(getContext());
                 textView.setTextColor(getResources().getColor(R.color.white));
                 int k = course.getClsName().indexOf("*");
-                String s1= course.getClsName().substring(0, k);
+                final String s1= course.getClsName().substring(0, k);
                 textView.setText(s1);
                 textView.setGravity(Gravity.CENTER);
                 textView.setBackground(drawable);
                 //添加到表格中
                 mGlClsContent.addView(textView, params);
+                textView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+                        alertDialog.setTitle("课程详情");
+                        alertDialog.setMessage(textView.getText().toString());
+                        alertDialog.setNegativeButton("知道啦", null);
+                        alertDialog.show();
+                    }
+                });
             }
         }
 

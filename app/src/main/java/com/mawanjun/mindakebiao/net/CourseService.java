@@ -54,7 +54,7 @@ public class CourseService {
             public void onResponse(Call call, Response response) throws IOException {
                 //登录到课表，并解析课程表的资源
                 if (response.isSuccessful()){
-
+                    //大于1M时应该用Stream流优化下
                     final String clsDocument = response.body().string();
                     mHandler.post(new Runnable() {
                         @Override

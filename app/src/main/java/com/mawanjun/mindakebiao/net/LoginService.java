@@ -68,7 +68,7 @@ public class LoginService {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()){
-                    //用流优化当收到的数据比较大
+                    //用流优化当收到的数据比较大大于1M时
                     byte [] bytes = response.body().bytes();
                     ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
                     final Bitmap bitmap =  BitmapFactory.decodeStream(bais);

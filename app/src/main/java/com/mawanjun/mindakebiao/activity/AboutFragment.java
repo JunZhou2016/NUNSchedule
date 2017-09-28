@@ -18,6 +18,8 @@ import com.mawanjun.mindakebiao.utils.ToastUtil;
 
 import java.io.FileInputStream;
 
+import okhttp3.OkHttpClient;
+
 /**
  * 项目名称：MinDaKeBiao
  * 类描述：

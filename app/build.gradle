@@ -8,13 +8,27 @@ android {
         applicationId "com.mawanjun.mindakebiao"
         minSdkVersion 19
         targetSdkVersion 23
-        versionCode 3
-        versionName "1.3.0"
+        versionCode 6
+        versionName "1.6.0"
     }
+
+    signingConfigs {
+        release {
+            storeFile file('F:\\java\\appsign\\mindakebiao.jks')
+            storePassword 'm1995w2j12'
+            keyAlias 'devma'
+            keyPassword 'm1995w2j12'
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            signingConfig signingConfigs.release
         }
     }
 }
@@ -33,6 +47,7 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.4.0'
    // annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
     compile 'me.majiajie:pager-bottom-tab-strip:1.0.0'
+
 }
 
 
