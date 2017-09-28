@@ -91,7 +91,7 @@ public class CourseParse {
     }
 
     private static String parsePersonalCourse(String text){
-<<<<<<< HEAD
+
         String str = "哈";
         String  data = "哈";
 
@@ -107,19 +107,8 @@ public class CourseParse {
         if (courseLocMatcher.find()) {
              data = courseLocMatcher.group(0);
         }
-=======
-        //正则表达式获取课名，和教室
-        Pattern courseNamePattern = Pattern.compile("^.+?(\\s{1})");
-        Matcher courseNameMatcher = courseNamePattern.matcher(text);
-        courseNameMatcher.find();
-        String str = courseNameMatcher.group(0);
 
-        Pattern courseLocPattern = Pattern.compile("\\s{1}(\\d+)");
-        Matcher courseLocMatcher = courseLocPattern.matcher(text);
-        courseLocMatcher.find();
-        String data = courseLocMatcher.group(0);
-
->>>>>>> b24f378d315a7cbe505b3cd47aadcbbc91d311ce
+      
 
         String weekText = text.substring(text.indexOf("{")+1,text.indexOf("}"));
 
