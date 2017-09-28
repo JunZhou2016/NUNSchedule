@@ -91,6 +91,8 @@ public class CourseParse {
     }
 
     private static String parsePersonalCourse(String text){
+
+
         String str = "哈";
         String  data = "哈";
 
@@ -106,6 +108,7 @@ public class CourseParse {
         if (courseLocMatcher.find()) {
              data = courseLocMatcher.group(0);
         }
+
 
         String weekText = text.substring(text.indexOf("{")+1,text.indexOf("}"));
 

@@ -1,5 +1,5 @@
-#民大课表
+# 姘戝ぇ璇捐〃
 
-	（北方民族大学专用）
+鍖楁柟姘戞棌澶у涓撶敤璇捐〃
 
-	 devma@foxmail.com
+devmawanjun@gmail.com

@@ -12,23 +12,12 @@ android {
         versionName "1.6.0"
     }
 
-    signingConfigs {
-        release {
-            storeFile file('F:\\java\\appsign\\mindakebiao.jks')
-            storePassword 'm1995w2j12'
-            keyAlias 'devma'
-            keyPassword 'm1995w2j12'
-        }
-    }
+
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
-        }
-        debug {
-            signingConfig signingConfigs.release
         }
     }
 }
